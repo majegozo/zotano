@@ -22,15 +22,25 @@ public class JUnitAlmacenLRUUltimoAcceso {
 		
 		Almacen a = new AlmacenLRUUltimoAcceso(delay, size) ;
 		
+		
 		a.put("first", primero) ;
+		System.out.println("pongo first " + a) ;
+		
 		a.put("second", segundo) ;
+		System.out.println("pongo second " + a ) ;
 		
+		System.out.println("accedo first") ;
 		Assert.assertEquals(a.get("first"), primero) ;
+		
+		
 		a.put("third", tercero) ;
+		System.out.println("pongo third" + a) ;
 		
-		System.out.println(a.toString());
 		Assert.assertEquals(a.get("second"), null) ;
+		System.out.println("accedo second " + a) ;
+		
 		Assert.assertEquals(a.get("first"), primero) ;
+		System.out.println("accedo first " + a) ;
 		
 		try {
 			Thread.currentThread().sleep( (delay + 1)*1000) ;

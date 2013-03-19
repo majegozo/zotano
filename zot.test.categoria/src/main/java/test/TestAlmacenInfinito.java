@@ -11,13 +11,14 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import cache.almacen.AlmacenInfinito;
 import cache.almacen.Almacen;
 import cache.almacen.AlmacenLRU;
+import cache.almacen.AlmacenLRUUltimoAcceso;
 
 import zot.model.domain.Categoria;
 import zot.model.service.jpa.ModelDao;
 
 public class TestAlmacenInfinito {
 
-	private static int times = 100000 ;
+	private static int times = 1000000 ;
 	private static int validUntil = 30 ; 
 			
 	protected static List<String> preparaPrueba(List<Integer> ids, int times) {
@@ -71,10 +72,9 @@ public class TestAlmacenInfinito {
 		System.out.println("Testing with almacen with valid " + validUntil + " seconds ") ;
 		test(new AlmacenInfinito(validUntil),prueba,dao) ;
 		System.out.println("Testing with lru with valid " + validUntil + " seconds ") ;
-		test(new AlmacenLRU(validUntil,5000),prueba,dao) ;
-		test(new AlmacenLRU(validUntil,4000),prueba,dao) ;
 		test(new AlmacenLRU(validUntil,3000),prueba,dao) ;
-		test(new AlmacenLRU(validUntil,2000),prueba,dao) ;
+		System.out.println("Testing with lru last access with valid " + validUntil + " seconds ") ;
+		test(new AlmacenLRUUltimoAcceso(validUntil,3000),prueba,dao) ;
 		
 	}
 	
