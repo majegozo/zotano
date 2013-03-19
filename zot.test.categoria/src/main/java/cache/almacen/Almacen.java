@@ -23,6 +23,7 @@ public abstract class Almacen {
 				aciertos ++ ;
 				return e.getElemento() ;
 			} else {
+				almacen.remove(key) ;
 				expirados ++ ;
 			}
 		} else {
