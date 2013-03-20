@@ -12,16 +12,17 @@ import cache.almacen.AlmacenInfinito;
 import cache.almacen.Almacen;
 import cache.almacen.AlmacenLRU;
 import cache.almacen.AlmacenLRUUltimoAcceso;
+import cache.almacen.NoCache;
 
 import zot.model.domain.Categoria;
 import zot.model.service.jpa.ModelDao;
 
 public class TestAlmacenInfinito {
 
-	private static int times = 1000000 ;
+	private static long times = 10 ;
 	private static int validUntil = 30 ; 
 			
-	protected static List<String> preparaPrueba(List<Integer> ids, int times) {
+	protected static List<String> preparaPrueba(List<Integer> ids, long times) {
 		List<String> prueba = new ArrayList<String>() ;
 		int numeros  = ids.size()  ;
 		Random r = new Random() ;
@@ -34,7 +35,7 @@ public class TestAlmacenInfinito {
 		return prueba ;
 	}
 	
-	public static void test(Almacen cache, List<String> prueba, ModelDao dao){
+	public static void test( Almacen cache, List<String> prueba, ModelDao dao){
 		long start = System.currentTimeMillis() ;
 		Object o;
 		for(String id : prueba) {
@@ -46,9 +47,9 @@ public class TestAlmacenInfinito {
 		}
 		long end = System.currentTimeMillis() ;
 		
-		System.out.println( "request " + times + " start " + start + " end " + end + " time spend(ms) " + (end - start ) );
-		System.out.println( "aciertos " + cache.getAciertos()+ " fallos " + cache.getFallos() +
-				" expirados " + cache.getExpirados() + " tiempo_cache (sg) " + cache.getValidUntil()  );
+		System.out.print( cache.getClass().getName() + "," + times + "," + (end - start ) + "," );
+		System.out.println( cache.getAciertos()+ "," + cache.getFallos() +
+				"," + cache.getExpirados());
 		
 	}
 	public static void main(String [] args) {
@@ -59,23 +60,42 @@ public class TestAlmacenInfinito {
 		List<Categoria> listado = dao.todasCategorias() ;
 		List<Integer> ids = new java.util.ArrayList<Integer>();
 		for(Categoria c : listado) ids.add(c.getId()) ;
-		List<String> prueba = preparaPrueba(ids, times) ;
+		List<String> prueba ;
 		
-		System.out.println("Testing without cache") ;
-		long start = System.currentTimeMillis() ;
-		for(String id : prueba) {
-		//	Categoria c = (Categoria) dao.lee(Integer.parseInt(id), Categoria.class) ;
+		System.out.println( "name,repeticiones,time(ms),aciertos,fallos,expirados");
+		
+		for( int i =1 ; i < 7; i++) {
+			prueba = preparaPrueba(ids, times) ;
+			
+			Almacen a =  new NoCache(validUntil) ;
+			a.stop() ;
+			test(a,prueba,dao) ;
+			a.clear() ;
+			
+			/*a =  new AlmacenInfinito(validUntil) ;
+			a.stop() ;
+			test(a,prueba,dao) ;
+			*/
+			a = new AlmacenInfinito(validUntil) ;
+			test(a,prueba,dao) ;
+			a.stop();
+			a.clear() ;
+
+			
+			a = new AlmacenLRU(validUntil,5000) ;
+			test(a,prueba,dao) ;
+			a.stop();
+			a.clear() ;
+
+			
+			a = new AlmacenLRUUltimoAcceso(validUntil,5000) ;
+			test(a,prueba,dao) ;
+			a.stop() ;
+			a.clear() ;
+
+			
+			times = times * 10 ;
 		}
-		long end = System.currentTimeMillis() ;
-		System.out.println( "request " + times + " start " + start + " end " + end + " time spend(ms) " + (end - start ) );
-		test(new AlmacenInfinito(validUntil),prueba,dao) ;
-		System.out.println("Testing with almacen with valid " + validUntil + " seconds ") ;
-		test(new AlmacenInfinito(validUntil),prueba,dao) ;
-		System.out.println("Testing with lru with valid " + validUntil + " seconds ") ;
-		test(new AlmacenLRU(validUntil,3000),prueba,dao) ;
-		System.out.println("Testing with lru last access with valid " + validUntil + " seconds ") ;
-		test(new AlmacenLRUUltimoAcceso(validUntil,3000),prueba,dao) ;
-		
 	}
 	
 	

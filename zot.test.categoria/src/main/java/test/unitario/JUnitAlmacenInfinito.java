@@ -25,9 +25,9 @@ public class JUnitAlmacenInfinito {
 		Assert.assertEquals(a.get("second"), segundo) ;
 		
 		try {
-			Thread.currentThread().sleep( (delay + 1)*1000) ;
+			Thread.currentThread().sleep( (delay * 2 + 1)*1000) ;
 		} catch(Exception e){
-			
+			e.printStackTrace();
 		}
 		
 		Assert.assertEquals(a.get("first"), null) ;

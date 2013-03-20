@@ -1,18 +1,70 @@
 package cache.almacen;
 
 import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Iterator;
 
 public abstract class Almacen {
 
-	protected HashMap<String, Item> almacen ;
+	protected Hashtable<String, Item> almacen ;
 	protected int segundos ;
 	protected int aciertos ;
 	protected int fallos ;
 	protected int expirados ;
+	protected Hebra cleaner ;
+	
+	protected class Hebra extends Thread{
+		Almacen padre ;
+		boolean stop = false ;
+		Hebra(Almacen padre){
+			this.padre = padre ;
+		}
+		protected void para(){
+			this.stop = true ;
+		}
+		public void run(){
+		
+			while ( !stop ) {
+				try {
+					sleep((segundos + 1 ) * 1000) ;
+					padre.clean() ;
+
+				} catch(Exception e){
+					e.printStackTrace() ;
+				}
+				
+			}
+		}
+		
+	}  
+	
+	protected void clean(){
+		String [] keys = {};
+		keys =  almacen.keySet().toArray(keys) ;
+		Item e ;
+		for( String key : keys) {
+			try {
+				e = almacen.get(key) ;
+				long time = System.currentTimeMillis() ;
+				if( e.getValidUntil() < time){
+					almacen.remove(key) ;
+				}
+			} catch(Exception ex){
+				ex.printStackTrace();
+			}
+		}
+	}
 	
 	public Almacen(int segundos) {
 		this.segundos = segundos ;
-		this.almacen = new HashMap<String, Item>() ;
+		this.almacen = new Hashtable<String, Item>() ;
+		this.cleaner = new Hebra(this) ;
+		this.cleaner.start() ;
+	}
+	
+	public void stop(){
+		if( this.cleaner != null ) 
+			this.cleaner.para();
 	}
 	
 	public Object get(String key) {
@@ -47,7 +99,7 @@ public abstract class Almacen {
 		almacen.clear();
 	}
 
-	public HashMap<String, Item> getAlmacen() {
+	public Hashtable<String, Item> getAlmacen() {
 		return almacen;
 	}
 
