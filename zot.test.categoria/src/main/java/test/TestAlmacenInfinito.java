@@ -10,8 +10,8 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import cache.almacen.AlmacenInfinito;
 import cache.almacen.Almacen;
+import cache.almacen.AlmacenLRC;
 import cache.almacen.AlmacenLRU;
-import cache.almacen.AlmacenLRUUltimoAcceso;
 import cache.almacen.NoCache;
 
 import zot.model.domain.Categoria;
@@ -82,13 +82,13 @@ public class TestAlmacenInfinito {
 			a.clear() ;
 
 			
-			a = new AlmacenLRU(validUntil,5000) ;
+			a = new AlmacenLRC(validUntil,3500) ;
 			test(a,prueba,dao) ;
 			a.stop();
 			a.clear() ;
 
 			
-			a = new AlmacenLRUUltimoAcceso(validUntil,5000) ;
+			a = new AlmacenLRU(validUntil,3500) ;
 			test(a,prueba,dao) ;
 			a.stop() ;
 			a.clear() ;

@@ -7,6 +7,7 @@ import org.junit.Test;
 
 import cache.almacen.Almacen;
 import cache.almacen.AlmacenInfinito;
+import cache.almacen.AlmacenLRC;
 import cache.almacen.AlmacenLRU;
 
 public class JUnitAlmacenLRU {
@@ -21,23 +22,21 @@ public class JUnitAlmacenLRU {
 		
 		Almacen a = new AlmacenLRU(delay, size) ;
 		
+		
 		a.put("first", primero) ;
 		a.put("second", segundo) ;
-		
 		Assert.assertEquals(a.get("first"), primero) ;
-		Assert.assertEquals(a.get("second"), segundo) ;
-		
 		a.put("third", tercero) ;
-		Assert.assertEquals(a.get("first"), null) ;
-		
+		Assert.assertEquals(a.get("second"), null) ;
+		Assert.assertEquals(a.get("first"), primero) ;
 		try {
 			Thread.currentThread().sleep( (delay + 1)*1000) ;
 		} catch(Exception e){
 			
 		}
 		
-		Assert.assertEquals(a.get("second"), null) ;
+		Assert.assertEquals(a.get("first"), null) ;
 		
-	}
+	} 
 
 }

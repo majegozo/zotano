@@ -6,7 +6,7 @@ import java.util.Iterator;
 
 public abstract class Almacen {
 
-	protected Hashtable<String, Item> almacen ;
+	protected HashMap<String, Item> almacen ;
 	protected int segundos ;
 	protected int aciertos ;
 	protected int fallos ;
@@ -39,15 +39,18 @@ public abstract class Almacen {
 	}  
 	
 	protected void clean(){
-		String [] keys = {};
-		keys =  almacen.keySet().toArray(keys) ;
+		Object [] cont ;
+		synchronized (almacen) {
+			cont  =   almacen.values().toArray() ;
+		}
+		//keys =  almacen.keySet().toArray(keys) ;
 		Item e ;
-		for( String key : keys) {
+		for( int i = 0 ;i < cont.length; i++) {
 			try {
-				e = almacen.get(key) ;
+				e = (Item) cont[i] ;
 				long time = System.currentTimeMillis() ;
 				if( e.getValidUntil() < time){
-					almacen.remove(key) ;
+					almacen.remove(e.getKey()) ;
 				}
 			} catch(Exception ex){
 				ex.printStackTrace();
@@ -57,7 +60,7 @@ public abstract class Almacen {
 	
 	public Almacen(int segundos) {
 		this.segundos = segundos ;
-		this.almacen = new Hashtable<String, Item>() ;
+		this.almacen = new HashMap<String, Item>() ;
 		this.cleaner = new Hebra(this) ;
 		this.cleaner.start() ;
 	}
@@ -99,7 +102,7 @@ public abstract class Almacen {
 		almacen.clear();
 	}
 
-	public Hashtable<String, Item> getAlmacen() {
+	public HashMap<String, Item> getAlmacen() {
 		return almacen;
 	}
 
