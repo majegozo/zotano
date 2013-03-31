@@ -30,7 +30,7 @@ public abstract class Almacen {
 					padre.clean() ;
 
 				} catch(Exception e){
-					e.printStackTrace() ;
+					//e.printStackTrace() ;
 				}
 				
 			}
@@ -53,7 +53,7 @@ public abstract class Almacen {
 					almacen.remove(e.getKey()) ;
 				}
 			} catch(Exception ex){
-				ex.printStackTrace();
+				//ex.printStackTrace();
 			}
 		}
 	}

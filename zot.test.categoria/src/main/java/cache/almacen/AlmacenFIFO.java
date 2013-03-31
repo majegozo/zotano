@@ -3,10 +3,10 @@ package cache.almacen;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AlmacenLRC extends AlmacenLimitacionObjetos {
+public class AlmacenFIFO extends AlmacenLimitacionObjetos {
 
 	List<String> lista ;
-	public AlmacenLRC(int segundos, int maxNumObjetos) {
+	public AlmacenFIFO(int segundos, int maxNumObjetos) {
 		super(segundos, maxNumObjetos);
 		lista = new ArrayList<String>();	
 		// TODO Auto-generated constructor stub

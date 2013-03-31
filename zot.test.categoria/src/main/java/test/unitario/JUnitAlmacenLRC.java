@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import cache.almacen.Almacen;
 import cache.almacen.AlmacenInfinito;
-import cache.almacen.AlmacenLRC;
+import cache.almacen.AlmacenFIFO;
 
 public class JUnitAlmacenLRC {
 
@@ -19,7 +19,7 @@ public class JUnitAlmacenLRC {
 		String segundo = "segundo" ;
 		String tercero = "tercero" ;
 		
-		Almacen a = new AlmacenLRC(delay, size) ;
+		Almacen a = new AlmacenFIFO(delay, size) ;
 		
 		a.put("first", primero) ;
 		a.put("second", segundo) ;

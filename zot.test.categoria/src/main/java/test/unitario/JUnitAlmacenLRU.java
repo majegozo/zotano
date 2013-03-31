@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import cache.almacen.Almacen;
 import cache.almacen.AlmacenInfinito;
-import cache.almacen.AlmacenLRC;
+import cache.almacen.AlmacenFIFO;
 import cache.almacen.AlmacenLRU;
 
 public class JUnitAlmacenLRU {
