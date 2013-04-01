@@ -8,5 +8,6 @@
   <modules>
   	<module>zot.model</module>
   	<module>zot.test.categoria</module>
+  	<module>zot.cache.repository</module>
   </modules>
 </project>
