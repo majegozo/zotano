@@ -23,6 +23,7 @@ public abstract class Contenido {
 	private String titulo ;
 	private Date fechaCreacion ;
 	private Date fechaModificacion ;
+	private String seo ;
 	
 	@Enumerated(EnumType.STRING)
 	private Estado estado ;
@@ -103,7 +104,12 @@ public abstract class Contenido {
 		this.merelaciono = merelaciono;
 	}
 
-	
+	public String getSeo() {
+		return seo;
+	}
+	public void setSeo(String seo) {
+		this.seo = seo;
+	}
 	public void addRelacionado(Contenido c) {
 		if( relacionados == null ) relacionados = new ArrayList<Contenido>();
 		if( !relacionados.contains(c) )

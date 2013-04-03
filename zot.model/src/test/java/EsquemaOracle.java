@@ -9,7 +9,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import zot.model.domain.Categoria;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:model-context.xml"})
+@ContextConfiguration(locations = {"classpath:/**/model-context.xml"})
 public class EsquemaOracle {
 
 	@Autowired
